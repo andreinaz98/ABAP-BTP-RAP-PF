@@ -1,0 +1,111 @@
+managed;
+strict ( 2 );
+with draft;
+
+define behavior for ZR_SALEORDER_6247 alias SaleOrder
+implementation in class zcl_saleorderbp_6247 unique
+persistent table zsaleorder_6247
+draft table zsaleorderd_6247
+lock master
+total etag LastChangedAt
+authorization master ( global, instance )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+  association _Item { create ( features : instance, authorization : update ); with draft; }
+
+  field ( numbering : managed, readonly ) SaleUUID;
+  field ( readonly )  IdSale,
+                      Createon,
+                      LocalCreatedAt,
+                      LocalCreatedBy,
+                      LocalLastChangedAt,
+                      LocalLastChangedBy;
+
+  //field ( mandatory ) IdSale, Email;
+  field ( mandatory ) Email;
+
+  determination setSaleOrderNumber on save { create;}
+  determination setCreateon on save {create;}
+
+  validation validateDates on save { create; field Createon, Deliverydate; }
+
+  determine action validateDateRanges { validation validateDates; }
+
+  draft action Resume with additional implementation;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+
+  draft determine action Prepare
+  {
+    validation validateDates;
+    validation ZR_ITEM_6247~validateItem;
+  }
+
+  mapping for zsaleorder_6247
+    {
+      SaleUUID           = sale_uuid;
+      IdSale             = id_sale;
+      Email              = email;
+      Firstname          = firstname;
+      Lastname           = lastname;
+      Country            = country;
+      Createon           = createon;
+      Deliverydate       = deliverydate;
+      Orderstatus        = orderstatus;
+      Imageurl           = imageurl;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+
+
+}
+
+
+define behavior for ZR_ITEM_6247 alias Item
+implementation in class zcl_Itembp_6247 unique
+persistent table zitem_6247
+draft table zitemd_6247
+lock dependent by _SaleOrder
+authorization dependent by _SaleOrder
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+
+  association _SaleOrder { with draft; }
+
+  field ( numbering : managed, readonly ) ItemUUID;
+  field ( readonly ) SaleUUID, LocalLastChangedAt;
+  field ( mandatory ) IdItem;
+
+  determination setItemNumber on save { create; field IdItem; }
+
+  validation validateItem on save { create; update; }
+
+  mapping for zitem_6247
+    {
+      SaleUUID           = sale_uuid;
+      ItemUUID           = item_uuid;
+      IdSale             = id_sale;
+      IdItem             = id_item;
+      Name               = name;
+      Description        = description;
+      Releasedate        = releasedate;
+      Discontinueddate   = discontinueddate;
+      Price              = price;
+      Height             = height;
+      Width              = width;
+      Depth              = depth;
+      Quantity           = quantity;
+      Unitofmeasure      = unitofmeasure;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+}

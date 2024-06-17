@@ -1,0 +1,98 @@
+@Metadata.layer:#CORE
+@Search.searchable: true
+
+
+@UI: {
+    headerInfo: {
+    typeName: 'Sale Order',
+    typeNamePlural: 'Sales Order',
+    title: {
+                type: #STANDARD,
+                value: 'SaleUuid'
+            },
+    description: {type: #STANDARD, value: 'Firstname' }},
+    presentationVariant: [{ sortOrder: [{ by: 'IdSale',
+                                          direction: #DESC }],
+                            visualizations: [{ type: #AS_LINEITEM }] }]
+    }
+
+annotate entity ZC_SALEORDER_6247 with
+{
+  @UI.facet: [{ id: 'SaleOrder',
+                purpose: #STANDARD,
+                type: #IDENTIFICATION_REFERENCE,
+                label: 'Sale Order',
+                position: 10 },
+              { id: 'Item',
+                purpose: #STANDARD,
+                type: #LINEITEM_REFERENCE,
+                label: 'Sales Order Items',
+                position: 20,
+                targetElement: '_Item' }]
+
+  @UI.hidden: true
+  SaleUUID;
+
+  @UI: {
+    lineItem: [{ position: 10,  importance: #HIGH }], //exclude:true,hidden: true
+     identification: [{ position: 10, label: 'Sale Orde ID' }], //[1,...,99999999]
+     selectionField: [{ position: 10 }]}
+
+  @Search.defaultSearchElement: true
+  IdSale;
+
+  @UI: {
+  lineItem: [{ position: 20, importance: #MEDIUM }],
+  identification: [{ position: 20 }]}
+  Email;
+
+  @UI: {
+  lineItem: [{ position: 30, importance: #MEDIUM }],
+  identification: [{ position: 30 }]}
+  Firstname;
+
+  @UI: {
+  lineItem: [{ position: 40, importance: #MEDIUM }],
+  identification: [{ position: 40 }]}
+  Lastname;
+
+  @UI: {
+  lineItem: [{ position: 50, importance: #MEDIUM }],
+  identification: [{ position: 50 }]}
+  Country;
+
+  @UI: {
+  lineItem: [{ position: 60, importance: #MEDIUM }],
+  identification: [{ position: 60 }],
+  selectionField: [{ position: 60 }]}
+  @Consumption.filter.selectionType: #RANGE
+  Createon;
+
+  @UI: {
+  lineItem: [{ position: 70, importance: #MEDIUM }],
+  identification: [{ position: 70 }],
+  selectionField: [{ position: 70 }]}
+  @Consumption.filter.selectionType: #RANGE
+  Deliverydate;
+
+  @UI: {
+  lineItem: [{ position: 80, importance: #HIGH }],
+  identification: [{ position: 80, label: 'OrderStatus' }],
+  selectionField: [{ position: 40 }]}
+  //@Consumption.valueHelpDefinition: [{ entity:{ name: 'ZR_ORDERSTAUST_6247', element: 'Orderstatus' } }]
+  Orderstatus;
+
+  //Imageurl;
+
+  @UI.hidden: true
+  LocalCreatedBy;
+  @UI.hidden: true
+  LocalCreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+
+}

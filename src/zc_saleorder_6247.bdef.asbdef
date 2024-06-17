@@ -1,0 +1,28 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_SALEORDER_6247 alias SAleOrder
+{
+  use create;
+  use update;
+  use delete;
+
+  use action validateDateRanges;
+
+  use action Resume;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+
+  use association _Item { create; with draft; }
+}
+
+define behavior for ZC_ITEM_6247 alias Item
+{
+  use update;
+  use delete;
+
+  use association _SaleOrder { with draft; }
+}

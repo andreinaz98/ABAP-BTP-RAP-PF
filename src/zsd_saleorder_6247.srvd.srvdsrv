@@ -1,0 +1,8 @@
+@EndUserText.label: 'Service Definition'
+define service ZSD_SALEORDER_6247 {
+  expose ZC_SALEORDER_6247   as SaleOrder;
+  expose ZC_ITEM_6247        as Item;
+  expose ZR_ORDERSTAUST_6247 as OrderStatus;
+  expose I_CountryText       as CountryText;
+  expose I_UnitOfMeasure     as UnitOfMeasure;
+}
