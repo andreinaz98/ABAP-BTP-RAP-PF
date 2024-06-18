@@ -169,7 +169,9 @@ CLASS lhc_SaleOrder IMPLEMENTATION.
         APPEND VALUE #( %tky = ls_order-%tky
                      %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
                                                    text = 'IdItem is mandatory' )
-                    ) TO reported-saleorder.
+                   %global = if_abap_behv=>mk-on ) TO reported-saleorder.
+
+        APPEND VALUE #( %tky = ls_order-%tky ) TO failed-saleorder.
 
       ENDIF.
 
@@ -186,10 +188,12 @@ CLASS lhc_SaleOrder IMPLEMENTATION.
           APPEND VALUE #( %tky = ls_order-%tky
                       %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
                                                     text = 'IdItem is mandatory' )
-                     ) TO reported-saleorder.
+                     %global = if_abap_behv=>mk-on ) TO reported-saleorder.
+          APPEND VALUE #( %tky = ls_order-%tky ) TO failed-saleorder.
         ENDIF.
       ENDLOOP.
     ENDLOOP.
+
 
   ENDMETHOD.
 
