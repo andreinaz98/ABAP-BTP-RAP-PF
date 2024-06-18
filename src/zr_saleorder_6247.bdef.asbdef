@@ -14,7 +14,8 @@ etag master LocalLastChangedAt
   create;
   update;
   delete;
-  association _Item { create ( features : instance, authorization : update ); with draft; }
+  //association _Item { create ( features : instance, authorization : update ); with draft; }
+  association _Item { create; with draft; }
 
   field ( numbering : managed, readonly ) SaleUUID;
   field ( readonly )  IdSale,
@@ -30,9 +31,9 @@ etag master LocalLastChangedAt
   determination setSaleOrderNumber on save { create;}
   determination setCreateon on save {create;}
 
-  validation validateDates on save { create; field Createon, Deliverydate; }
-
-  determine action validateDateRanges { validation validateDates; }
+  //validation validateSale on save { create; field Createon; update}
+ validation validateOrder on save { create; field Createon; update;}
+ // determine action validateDateRanges { validation validateDates; }
 
   draft action Resume with additional implementation;
   draft action Edit;
@@ -41,7 +42,7 @@ etag master LocalLastChangedAt
 
   draft determine action Prepare
   {
-    validation validateDates;
+    validation validateOrder;
     validation ZR_ITEM_6247~validateItem;
   }
 
@@ -85,7 +86,7 @@ etag master LocalLastChangedAt
   field ( readonly ) SaleUUID, LocalLastChangedAt;
   field ( mandatory ) IdItem;
 
-  determination setItemNumber on save { create; field IdItem; }
+  //determination setItemNumber on save { create; field IdItem; }
 
   validation validateItem on save { create; update; }
 

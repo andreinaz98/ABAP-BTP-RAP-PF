@@ -7,7 +7,7 @@ define behavior for ZI_SALEORDER_6247 alias SaleOrder
   use update;
   use delete;
 
-  use action validateDateRanges;
+  //use action validateDateRanges;
 
   use action Resume;
   use action Edit;

@@ -1,8 +1,8 @@
 CLASS lhc_Item DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
-    METHODS setItemNumber FOR DETERMINE ON SAVE
-      IMPORTING keys FOR Item~setItemNumber.
+*    METHODS setItemNumber FOR DETERMINE ON SAVE
+*      IMPORTING keys FOR Item~setItemNumber.
 
     METHODS validateItem FOR VALIDATE ON SAVE
       IMPORTING keys FOR Item~validateItem.
@@ -11,8 +11,8 @@ ENDCLASS.
 
 CLASS lhc_Item IMPLEMENTATION.
 
-  METHOD setItemNumber.
-
+*  METHOD setItemNumber.
+*
 *    DATA: lv_count TYPE i,
 *          lv_max_iditem TYPE i,
 *          lt_items TYPE TABLE OF zr_item_6247,
@@ -49,10 +49,11 @@ CLASS lhc_Item IMPLEMENTATION.
 *      WITH VALUE #( FOR item IN lt_items INDEX INTO i (
 *                       %tky = item-%tky
 *                       IdItem = CONV string( lv_count + i ) ) ).
-
-    ENDMETHOD.
+*
+*    ENDMETHOD.
 
     METHOD validateItem.
+
 
     ENDMETHOD.
 

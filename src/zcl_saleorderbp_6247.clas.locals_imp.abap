@@ -1,9 +1,9 @@
 CLASS lhc_SaleOrder DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
-    METHODS get_instance_features FOR INSTANCE FEATURES
-      IMPORTING keys REQUEST requested_features FOR SaleOrder RESULT result.
-
+*    METHODS get_instance_features FOR INSTANCE FEATURES
+*      IMPORTING keys REQUEST requested_features FOR SaleOrder RESULT result.
+*
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
       IMPORTING keys REQUEST requested_authorizations FOR SaleOrder RESULT result.
 
@@ -19,16 +19,16 @@ CLASS lhc_SaleOrder DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS setCreateon FOR DETERMINE ON SAVE
       IMPORTING keys FOR SaleOrder~setCreateon.
 
-    METHODS validateDates FOR VALIDATE ON SAVE
-      IMPORTING keys FOR SaleOrder~validateDates.
+    METHODS validateOrder FOR VALIDATE ON SAVE
+      IMPORTING keys FOR SaleOrder~validateOrder.
 
 ENDCLASS.
 
 CLASS lhc_SaleOrder IMPLEMENTATION.
 
-  METHOD get_instance_features.
-
-  ENDMETHOD.
+*  METHOD get_instance_features.
+*
+*  ENDMETHOD.
 
   METHOD get_instance_authorizations.
   ENDMETHOD.
@@ -151,7 +151,46 @@ CLASS lhc_SaleOrder IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD validateDates.
+  METHOD validateOrder.
+
+    READ ENTITIES OF zr_saleorder_6247 IN LOCAL MODE
+      ENTITY SaleOrder
+      FIELDS ( SaleUUID IdSale )
+      WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_orders).
+
+    "validacion para SAle order
+
+
+    LOOP AT lt_orders INTO DATA(ls_order).
+      "Validacion para Sale Order
+      IF ls_order-IdSale IS INITIAL.
+        "Mensaje de error para IdSale vacio
+        APPEND VALUE #( %tky = ls_order-%tky
+                     %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
+                                                   text = 'IdItem is mandatory' )
+                    ) TO reported-saleorder.
+
+      ENDIF.
+
+      "Validacion para Items
+      READ ENTITIES OF zr_saleorder_6247 IN LOCAL MODE
+          ENTITY Item
+          FIELDS ( IdItem )
+          WITH VALUE #( ( SaleUUID = ls_order-SaleUUID ) )
+          RESULT DATA(lt_items).
+
+      LOOP AT lt_items INTO DATA(ls_item).
+        IF ls_item-IdItem IS INITIAL.
+          " mensaje de error para IdItem vacio
+          APPEND VALUE #( %tky = ls_order-%tky
+                      %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
+                                                    text = 'IdItem is mandatory' )
+                     ) TO reported-saleorder.
+        ENDIF.
+      ENDLOOP.
+    ENDLOOP.
+
   ENDMETHOD.
 
 ENDCLASS.
